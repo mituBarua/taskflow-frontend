@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply m-0 min-w-80 bg-stone-50 font-sans text-slate-800 antialiased;
+  }
+
+  button:not(:disabled),
+  select:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  select:disabled {
+    cursor: not-allowed;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    @apply outline-2 outline-offset-4 outline-emerald-600;
+  }
+
+  dialog::backdrop {
+    background: rgb(15 23 42 / 45%);
+    backdrop-filter: blur(4px);
+  }
+}
+
+@layer components {
+  .field {
+    @apply w-full rounded-xl border border-slate-200
+      bg-white px-3.5 py-2.5 text-sm text-slate-800
+      outline-none transition placeholder:text-slate-400
+      focus:border-emerald-500 focus:ring-4
+      focus:ring-emerald-50
+      disabled:bg-slate-50 disabled:text-slate-500;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-slate-200/80
+      bg-white shadow-sm;
+  }
+}
