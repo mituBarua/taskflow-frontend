@@ -1,3 +1,7 @@
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || "/api"
+).replace(/\/+$/, "");
+
 export class ApiError extends Error {
   constructor(message, status = 0, errors = {}) {
     super(message);
@@ -22,7 +26,7 @@ export async function apiRequest(path, options = {}) {
     : timeoutSignal;
 
   try {
-    const response = await fetch(`/api${path}`, {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
       ...requestOptions,
       signal: requestSignal,
       headers: {
@@ -47,11 +51,12 @@ export async function apiRequest(path, options = {}) {
 
     return payload.data;
   } catch (error) {
-    // Component unmounted or its request was cancelled.
+    // Ignore requests cancelled by the calling component.
     if (signal?.aborted) {
       throw error;
     }
 
+    // Preserve API validation and server errors.
     if (error instanceof ApiError) {
       throw error;
     }
