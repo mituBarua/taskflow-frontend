@@ -1,156 +1,169 @@
-Taskflow - Frontend
+# Taskflow — Frontend
 
-I built Taskflow as part of my full-stack developer assignment. My goal was to create a task board that is easy to use on both desktop and mobile. Users can create tasks, edit their details, change their status, and delete them when needed. Search, filters, and summary cards help keep track of the work.
+I built Taskflow as part of my full-stack developer assignment. My goal was to create a simple task board that works well on both desktop and mobile.
 
-Author: Mitu Barua
+Users can create tasks, edit their details, update their status, and delete them when needed. Search, filters, and summary cards make it easier to keep track of work.
 
-Live application
+**Author:** Mitu Barua
 
-Frontend source
+## 🔗 Project Links
 
-Backend source
+- **Live application:** https://taskflow-frontend-q8ga.onrender.com
+- **Frontend repository:** https://github.com/mituBarua/taskflow-frontend
+- **Backend repository:** https://github.com/mituBarua/taskflow-backend
 
-Built with
+## Features
 
-I used React and Vite for the frontend, Tailwind CSS for styling, Lucide React for icons, and Sonner for notifications. The app connects to a separate Express API that stores tasks in SQLite.
+- Create, view, edit, and delete tasks.
+- Set task priority to **Low**, **Medium**, or **High**.
+- Update status to **Pending**, **In Progress**, or **Completed**.
+- Search tasks by title or description.
+- Filter tasks by status and priority.
+- View task counts in dashboard summary cards.
+- Confirm before deleting a task.
+- Receive validation messages and success notifications.
+- Use the application on desktop and mobile.
 
-Run locally
+## Tech Stack
 
-Use Node.js 24 and npm. Start the backend on port 4000 first using its README.
+| Technology | Purpose |
+| --- | --- |
+| React | User interface |
+| Vite | Development server and production build |
+| Tailwind CSS | Styling and responsive layout |
+| Lucide React | Icons |
+| Sonner | Toast notifications |
+| Express and SQLite | Separate backend API and database |
 
+## Getting Started
+
+### Prerequisites
+
+- **Node.js 24**
+- **npm**
+- Backend running on **port 4000**
+
+### 1. Clone the repository
+
+```bash
 git clone https://github.com/mituBarua/taskflow-frontend.git
 cd taskflow-frontend
+```
+
+### 2. Install dependencies
+
+```bash
 npm ci
+```
+
+### 3. Start the development server
+
+```bash
 npm run dev
+```
 
-Open the local URL printed by Vite, normally http://localhost:5173. With no VITE_API_URL configured, requests use /api; the Vite development proxy forwards them to http://localhost:4000.
+Open the address printed in your terminal, normally:
 
-For a different API, create .env.local in this repository's root:
+**http://localhost:5173**
 
+By default, the frontend sends requests to `/api`. The Vite development proxy forwards these requests to `http://localhost:4000`.
+
+### 4. Configure a different backend, if needed
+
+Create a `.env.local` file in the frontend root:
+
+```env
 VITE_API_URL=http://localhost:4000/api
+```
 
-The value must include /api and must not include /tasks. Restart Vite after changing it. Variables prefixed with VITE_ are included in the browser build, so do not put secrets in them.
+**Include `/api` at the end, but do not add `/tasks`.**
 
-Useful commands
+Restart the development server after changing environment variables. Variables beginning with `VITE_` are visible in the browser build, so they must not contain secrets.
 
-Command
+## Available Commands
 
-Purpose
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build in `dist/` |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint checks |
 
-npm run dev
+## How I Organized the Code
 
-Start the development server
+I separated task components from shared UI components so that buttons, dialogs, and form fields can be reused. API requests have their own module, and a custom hook manages task data.
 
-npm run build
+| Location | Responsibility |
+| --- | --- |
+| `src/pages/TasksPage.jsx` | Task board, filters, and dialogs |
+| `src/hooks/useTasks.js` | Fetch tasks and manage task state |
+| `src/api/client.js` | API configuration and error handling |
+| `src/api/tasks.api.js` | Task API requests |
+| `src/components/tasks/` | Task cards, forms, filters, and statistics |
+| `src/components/ui/` | Reusable buttons, dialogs, and form fields |
+| `src/components/layout/` | Application layout |
+| `src/constants/` | Task options and styles |
+| `src/index.css` | Tailwind and shared styles |
 
-Build the application into dist/
+## Validation and Feedback
 
-npm run preview
+- **Title:** Required, with a maximum of 120 characters.
+- **Description:** Maximum of 2,000 characters.
+- **Loading:** Placeholders appear while tasks are loading.
+- **Errors:** Form errors appear beside inputs, and failed task loads offer a retry button.
+- **Success:** Notifications confirm completed actions.
+- **Deletion:** A confirmation dialog appears before removing a task.
 
-Preview the production build locally
+API requests time out after **15 seconds**.
 
-npm run lint
+## Deployment
 
-Run the configured ESLint checks
+I deployed the frontend as a **Render Static Site**.
 
-How I organized the code
+| Setting | Value |
+| --- | --- |
+| Build command | `npm ci && npm run build` |
+| Publish directory | `dist` |
+| Node.js version | `24` |
 
-I separated task-specific components from shared UI components so that buttons, form fields, and dialogs can be reused. API requests live in their own module, and a custom hook manages task data.
+The frontend build uses:
 
-Location
+```env
+VITE_API_URL=https://taskflow-backend-xi3z.onrender.com/api
+```
 
-Responsibility
+The backend's `FRONTEND_URL` must match:
 
-src/pages/TasksPage.jsx
+**https://taskflow-frontend-q8ga.onrender.com**
 
-Coordinate the board, filters, and task dialogs
+Rebuild the frontend after changing `VITE_API_URL`. The local Vite proxy is not available on the deployed static site.
 
-src/hooks/useTasks.js
+## Testing
 
-Load tasks and update React state after API operations
+I completed manual testing of the application and included screenshots of the desktop board, title validation, and mobile layout in my submission.
 
-src/api/client.js
+A clean dependency installation and production build also passed during submission preparation.
 
-Handle the base URL, JSON responses, cancellation, and errors
+**This version does not include an automated browser test suite.**
 
-src/api/tasks.api.js
+## Current Limitations
 
-Define task API calls
+- The application uses one shared task board without user accounts.
+- Search and filtering happen in the browser.
+- PWA support and payment integration are not included.
+- The free Render backend uses temporary storage, so SQLite data can be lost when the service restarts, redeploys, or spins down.
+- An idle backend may take time to wake up. If the first request fails, wait briefly and try again.
 
-src/components/tasks/
-
-Task cards, list, form, filters, stats, and deletion dialog
-
-src/components/ui/
-
-Reusable button, modal, and field components
-
-src/components/layout/
-
-Shared application layout
-
-src/constants/
-
-Shared task options and visual styles
-
-src/index.css
-
-Tailwind styles and shared field/panel classes
-
-Features and behavior
-
-Create and edit a task using the same form.
-
-Set a priority of Low, Medium, or High.
-
-Move tasks between Pending, In Progress, and Completed.
-
-Search titles and descriptions, and combine status and priority filters.
-
-Confirm deletion before removing a task.
-
-Show loading placeholders, empty states, inline validation, success notifications, and retryable loading errors.
-
-Adapt the layout for desktop and mobile screens.
-
-Titles are required and limited to 120 characters. Descriptions are limited to 2,000 characters. Requests time out after 15 seconds; an idle hosted backend may need time to wake up before retrying.
-
-Deploy on Render
-
-Create a Static Site connected to this repository. Leave Root Directory empty when package.json is at the repository root.
-
-Build command: npm ci && npm run build
-
-Publish directory: dist
-
-Build environment: VITE_API_URL=https://taskflow-backend-xi3z.onrender.com/api
-
-Use Node.js 24 for the build.
-
-Set the backend's FRONTEND_URL to https://taskflow-frontend-q8ga.onrender.com. Rebuild the frontend whenever VITE_API_URL changes. The development proxy does not run on the deployed static site.
-
-Testing and limits
-
-I completed manual testing of the application and included screenshots of the desktop board, title validation, and mobile layout in my submission. A clean dependency installation and production build also passed during submission preparation. There is no automated browser test suite in this version.
-
-The application is a shared task board without accounts or user-specific access. Search and filtering run in the browser. PWA and payment integration are not implemented.
-
-The live demo uses a local SQLite file on a free Render backend. Hosted data can be lost when that backend restarts, redeploys, or spins down. For durable hosting, use persistent storage or migrate to a managed SQL database.
-
-AI assistance disclosure
+## AI Assistance Disclosure
 
 I used ChatGPT for ideas, implementation guidance, debugging, and assistance with parts of the code. I integrated the changes, deployed the application, and completed manual testing.
 
-Reference: ChatGPT.
+**Reference:** [ChatGPT](https://chatgpt.com/)
 
-References
+## References
 
-https://react.dev/
-
-https://vite.dev/guide/env-and-mode
-
-https://tailwindcss.com/docs/installation/using-vite
-
-https://render.com/docs/static-sites
-
-https://render.com/docs/free
+- [React](https://react.dev/)
+- [Vite Environment Variables](https://vite.dev/guide/env-and-mode)
+- [Tailwind CSS](https://tailwindcss.com/docs/installation/using-vite)
+- [Render Static Sites](https://render.com/docs/static-sites)
+- [Render Free-Service Limitations](https://render.com/docs/free)
